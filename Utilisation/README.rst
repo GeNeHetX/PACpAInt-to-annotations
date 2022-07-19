@@ -41,7 +41,7 @@ Le programme fonctionne sur n'importe quel machine tant qu'il est lancé à part
 
 Avant de lancer le programme, il faut placer les slides analysées par PACpAInt dans un dossier **Images** et les résultats de l'analyse dans un dossier **pacpaint results** en les laissant dans leurs dossiers respectifs :
 
-.. image:: ./dossier.png
+.. image:: ./dossier_QuPath.png
    :width: 500 
    
 Le dossier **programmes** contient les programmes Python qui généreront les fichiers GeoJSON et groovy ; ces derniers seront aussi dans ce dossier. Les fichiers GeoJSON seront quant à eux dans le dossier **geojson**.
@@ -61,10 +61,10 @@ Le programme fonctionne dans n'importe quelle machine tant qu'il est lancé à p
 
 Avant de lancer le programme, il faut placer les slides analysées par PACpAInt dans un dossier **Images** et les résultats de l'analyse dans un dossier **pacpaint results** en les laissant dans leurs dossiers respectifs :
 
-.. image:: ./dossier.png
+.. image:: ./dossier_DSA.png
   :width: 500
   
-Le dossier **programmes** contient les programmes Python qui validera l'authentification à l'API de DSA, qui téleverseront les slides et généreront les annotations.
+Le dossier **programmes** contient les programmes Python qui validera l'authentification à l'API de DSA, qui téléverseront les slides et généreront les annotations.
 
 Enfin, pour lancer le programme, il suffit de lancer le programme *complet.sh* dans un terminal ; par exemple, lorsque l'on se trouve dans le même dossier que le fichier :
 ::
