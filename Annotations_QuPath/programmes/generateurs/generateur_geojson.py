@@ -6,14 +6,18 @@ from math import floor
 import sys
 
 
-def generateur_geojson_tumeurs(nom_fichier, lame):
+def generateur_geojson(nom_fichier, lame):
 
     fichier_geojson_tumeurs = nom_fichier[:-(len(lame)+7)] + "geojson/tumeurs/"  + lame + ".geojson"
     ecriture_geojson_tumeurs = open(fichier_geojson_tumeurs, "w")
-    
-    body = '{"type":"FeatureCollection", "features":['
 
-    fichier_csv = nom_fichier[:-(len(lame)+7)] + "/pacpaint results/" + lame + "/tile_scores.csv"
+    fichier_geojson_stromas = nom_fichier[:-(len(lame)+7)] + "geojson/stromas/"  + lame + ".geojson"
+    ecriture_geojson_stromas = open(fichier_geojson_stromas, "w")
+ 
+    corps_tumeurs = '{"type":"FeatureCollection", "features":['
+    corps_stromas = '{"type":"FeatureCollection", "features":['
+    
+    fichier_csv = nom_fichier[:-(len(lame)+7)] + "./pacpaint results/" + lame + "/tile_scores.csv"
     lecture_csv = open(fichier_csv, "r")
     iterateur_csv = csv.reader(lecture_csv, delimiter=',')
     line_count = 0
@@ -25,13 +29,26 @@ def generateur_geojson_tumeurs(nom_fichier, lame):
                 xcoin = floor((int(row[2]))*112/0.2479)
                 ycoin = floor((int(row[3]))*112/0.2479)
                 tuile = '{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[%i, %i],[%i, %i],[%i, %i],[%i, %i],[%i, %i]]]},"properties":{"object_type":"annotation","classification":{"name":"Tumor","colorRGB":-3670016},"isLocked":false}},' % (xcoin, ycoin, xcoin, ycoin + 452, xcoin + 452, ycoin + 452, xcoin + 452, ycoin, xcoin, ycoin)
-                body = "".join([body, tuile])
-    body = body[:-1]
-    body = "".join([body, ']}'])
-    ecriture_geojson_tumeurs.write(body)
-    lecture_csv.close()
+                corps_tumeurs = "".join([corps_tumeurs, tuile])
 
+                if float(row[5]) >= 0.5:
+                    tuile = '{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[%i, %i],[%i, %i],[%i, %i],[%i, %i],[%i, %i]]]},"properties":{"object_type":"annotation","classification":{"name":"Tumor","colorRGB":-3670016},"isLocked":false}},' % (xcoin, ycoin, xcoin, ycoin + 452, xcoin + 452, ycoin + 452, xcoin + 452, ycoin, xcoin, ycoin)
+                else:
+                    tuile = '{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[%i, %i],[%i, %i],[%i, %i],[%i, %i],[%i, %i]]]},"properties":{"object_type":"annotation","classification":{"name":"Stroma","colorRGB":-6895466},"isLocked":false}},' % (xcoin, ycoin, xcoin, ycoin + 452, xcoin + 452, ycoin + 452, xcoin + 452, ycoin, xcoin, ycoin)
+                corps_stromas = "".join([corps_stromas, tuile])
+
+    lecture_csv.close()
+                                    
+    corps_tumeurs = corps_tumeurs[:-1]
+    corps_tumeurs = "".join([corps_tumeurs, ']}'])
+    corps_stromas = corps_stromas[:-1]
+    corps_stromas = "".join([corps_stromas, ']}'])
+    
+    ecriture_geojson_tumeurs.write(corps_tumeurs)
     ecriture_geojson_tumeurs.close()
+
+    ecriture_geojson_stromas.write(corps_stromas)
+    ecriture_geojson_stromas.close()
 
 
 def main():
@@ -46,7 +63,7 @@ def main():
     while nom_fichier[-fin] != "/":
         lame = nom_fichier[-fin] + lame
         fin += 1
-    generateur_geojson_tumeurs(nom_fichier, lame)
+    generateur_geojson(nom_fichier, lame)
 
 
 if __name__ == "__main__":
